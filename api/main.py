@@ -33,7 +33,7 @@ async def success():
 async def success_custom(size):
     try:
         size = int(size)
-    except Exception as e:
+    except Exception:
         size = 500
 
     source = Image.open(
@@ -68,7 +68,7 @@ async def fixed():
 async def fixed_custom(size):
     try:
         size = int(size)
-    except Exception as e:
+    except Exception:
         size = 500
 
     source = Image.open(
@@ -103,7 +103,7 @@ async def failure():
 async def failure_custom(size):
     try:
         size = int(size)
-    except Exception as e:
+    except Exception:
         size = 500
 
     source = Image.open(
