@@ -6,15 +6,26 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse, StreamingResponse
 from PIL import Image
 
-app = FastAPI()
+from api.helpers import api_description, get_latest_version
+
+app = FastAPI(
+    title="🏗️ build-result-meme-api",
+    description=api_description,
+    version=get_latest_version(),
+    contact={
+        "name": "GitHub",
+        "url": "https://github.com/Nachichuri/build-result-meme-api",
+    },
+    swagger_ui_parameters={"defaultModelsExpandDepth": -1},
+)
 
 
-@app.get("/", response_class=RedirectResponse, status_code=303)
+@app.get("/", response_class=RedirectResponse, status_code=303, include_in_schema=False)
 async def docs():
     return "/docs"
 
 
-@app.get("/success", response_class=StreamingResponse)
+@app.get("/success", tags=["memes"])
 async def success():
     source = Image.open(
         f'api/assets/success/{random.choice(os.listdir("api/assets/success/"))}'
@@ -29,7 +40,7 @@ async def success():
     return StreamingResponse(image, media_type="image/jpeg")
 
 
-@app.get("/success/{size}")
+@app.get("/success/{size}", tags=["custom size"])
 async def success_custom(size):
     try:
         size = int(size)
@@ -49,7 +60,7 @@ async def success_custom(size):
     return StreamingResponse(image, media_type="image/jpeg")
 
 
-@app.get("/fixed", response_class=StreamingResponse)
+@app.get("/fixed", tags=["memes"])
 async def fixed():
     source = Image.open(
         f'api/assets/fixed/{random.choice(os.listdir("api/assets/fixed/"))}'
@@ -64,7 +75,7 @@ async def fixed():
     return StreamingResponse(image, media_type="image/jpeg")
 
 
-@app.get("/fixed/{size}")
+@app.get("/fixed/{size}", tags=["custom size"])
 async def fixed_custom(size):
     try:
         size = int(size)
@@ -84,7 +95,7 @@ async def fixed_custom(size):
     return StreamingResponse(image, media_type="image/jpeg")
 
 
-@app.get("/failure", response_class=StreamingResponse)
+@app.get("/failure", tags=["memes"])
 async def failure():
     source = Image.open(
         f'api/assets/failure/{random.choice(os.listdir("api/assets/failure/"))}'
@@ -99,7 +110,7 @@ async def failure():
     return StreamingResponse(image, media_type="image/jpeg")
 
 
-@app.get("/failure/{size}")
+@app.get("/failure/{size}", tags=["custom size"])
 async def failure_custom(size):
     try:
         size = int(size)
