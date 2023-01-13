@@ -1,4 +1,5 @@
 import requests
+from PIL import Image
 
 
 def get_latest_version():
@@ -10,6 +11,13 @@ def get_latest_version():
         return "N/A"
 
     return response.json()["tag_name"]
+
+
+def get_resized_gif(frames, size):
+    for frame in frames:
+        thumbnail = frame.copy()
+        thumbnail.thumbnail(size)
+        yield thumbnail
 
 
 api_description = """
