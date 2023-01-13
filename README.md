@@ -1,6 +1,6 @@
 # 🏗️ build-result-meme-api
 
-![](https://img.shields.io/github/workflow/status/nachichuri/build-result-meme-api/Build?style=flat-square)
+![](https://img.shields.io/github/actions/workflow/status/nachichuri/build-result-meme-api/build.yaml?branch=main&style=flat-square)
 ![](https://img.shields.io/github/license/nachichuri/build-result-meme-api?color=orange&style=flat-square)
 
 Yet another free public API, this time it will return a meme to illustrate the result of your CI/CD pipeline 🦑
