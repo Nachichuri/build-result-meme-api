@@ -1,49 +1,37 @@
 import requests
-from PIL import Image
 
 
-def get_latest_version():
-    response = requests.get(
-        "https://api.github.com/repos/nachichuri/build-result-meme-api/releases/latest"
-    )
+def get_latest_version() -> str:
+    """
+    Fetches the latest version tag of the 'build-result-meme-api' repository from GitHub.
 
-    if response.status_code != 200:
+    Returns:
+        str: The latest version tag if successful, otherwise 'N/A'.
+    """
+    try:
+        response = requests.get(
+            "https://api.github.com/repos/nachichuri/build-result-meme-api/releases/latest"
+        )
+        response.raise_for_status()
+
+        return response.json().get("tag_name")
+
+    except requests.RequestException:
         return "N/A"
-
-    return response.json()["tag_name"]
 
 
 def get_resized_gif(frames, size):
+    """
+    Resize each frame of a GIF to the specified dimensions.
+
+    Args:
+        frames (list[PIL.Image.Image]): List of PIL Image objects representing frames of a GIF.
+        size (tuple[int, int]): A tuple containing the desired width and height for resizing.
+
+    Yields:
+        PIL.Image.Image: Resized frames of the GIF.
+    """
     for frame in frames:
         thumbnail = frame.copy()
         thumbnail.thumbnail(size)
         yield thumbnail
-
-
-api_description = """
-Yet another free public API, this time it will return a meme to illustrate the result of your CI/CD pipeline 🦑
-
-#### How it works
-
-There are three endpoints available:
-* [Success](https://build-result-meme.com/success) (https://build-result-meme.com/success)
-* [Fixed](https://build-result-meme.com/fixed) (https://build-result-meme.com/fixed)
-* [Failure](https://build-result-meme.com/failure) (https://build-result-meme.com/failure)
-
-The returned image will always have a max width and/or height of 500px.
-
-Each endpoint can also take an integer as an argument, which will set the max height and width of the image to the given value. For example:
-* [https://build-result-meme.com/success/200](https://build-result-meme.com/success/200) if the original meme was 1366x720px, the returned meme will be 200x112px.
-
-#### How to use it
-
-You can use it in multiple ways:
-* ✉️ Jenkins Email
-* 🪝 Messaging webhooks (Slack, Discord)
-* 📝 Markdown files (using _\!\[ ]\(https://...)_)
-* 🤯 Pretty much anywhere you want!
-
-#### How to contribute
-
-Did you just come up with the **most hilarious** pipeline-related meme ever? You can either contribute by [creating a pull request](https://github.com/firstcontributions/first-contributions) to [this API's public repo](https://github.com/Nachichuri/build-result-meme-api), or [contact the maintainer](mailto:nachichuri@gmail.com) with the meme so we can just add it!
-"""
